@@ -1,4 +1,9 @@
-
+<?php
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+    var_dump($_SESSION);
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,12 +26,20 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?controle=usuarioController&metodo=inserir">Criar conta</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?controle=usuarioController&metodo=login">Login</a>
-                    </li>
+                    <?php
+                        if(isset($_SESSION['id'])) {
+                            echo "<li class='nav-item'>
+                                    <a class='nav-link' href='index.php?controle=usuarioController&metodo=logout'>Logout</a>
+                                  </li>";
+                        } else {
+                            echo  "<li class='nav-item'>
+                                    <a class='nav-link' href='index.php?controle=usuarioController&metodo=inserir'>Criar conta</a>
+                                   </li>
+                                    <li class='nav-item'>
+                                        <a class='nav-link' href='index.php?controle=usuarioController&metodo=login'>Login</a>
+                                    </li>";
+                        }
+                    ?>
                 </ul>
             </div>
         </div>

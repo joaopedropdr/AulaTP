@@ -21,6 +21,7 @@
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </div>
         </form>
+        <a href="index.php?controle=usuarioController&metodo=esqueceu_senha">Esqueci minha senha</a>
     </div>
 </div>
 
