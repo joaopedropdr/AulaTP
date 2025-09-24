@@ -30,9 +30,9 @@
                                 if(!isset($_SESSION)) {
                                     session_start();
                                 }
-                                $_SESSION['nome'] = $retorno[0]->nome;
-                                $_SESSION['id'] = $retorno[0]->id_usuario;
-                                $_SESSION['email'] = $retorno[0]->email;
+                                $_SESSION["nome"] = $retorno[0]->nome;
+                                $_SESSION["id"] = $retorno[0]->id_usuario;
+                                $_SESSION["email"] = $retorno[0]->email;
                                 header("location:index.php");
                             } else {
                                 $msg[2] = "Email ou senha inválido!!!";
@@ -107,6 +107,7 @@
 
         public function esqueceu_senha() {
             $msg = "";
+            $link = "";
             $msg_email = "Será enviado um email para recuperar sua senha!";
             if($_POST) {
                 if(empty($_POST['email'])) {
@@ -120,7 +121,7 @@
                         if(count($retorno) > 0) {
                             // Enviar um email
                             $assunto = "Recuperação de senha - meu pet sumiu";
-                            $link = "index.php?controle=usuarioController&metodo=trocar_senha&id=" . base64_encode($retorno[0]->id_usuario);
+                            $link = "http://localhost/meu_pet_sumiu/index.php?controle=usuarioController&metodo=trocar_senha&id=" . base64_encode($retorno[0]->id_usuario);
                             $nomeDestino = $retorno[0]->nome;
                             $destino = $retorno[0]->email;
                             $remetente = "seu_email";
@@ -129,12 +130,12 @@
                             Caso não tenha sido requerida por voce desconsidere essa mensagem.
                             Caso contrario click no link abaixo para informar a nova senha</p> 
                             <a href= '" . $link . "'>Clique aqui </a> <br><br> <p>atenciosamente <br>" . $nomeRemetente . "</p>";
-                            $ret = sendMail($assunto, $mensagem, $remetente, $nomeRemetente, $destino, $nomeDestino);
+                           /* $ret = sendMail($assunto, $mensagem, $remetente, $nomeRemetente, $destino, $nomeDestino);
                             if($ret) {
                                 $msg_email = "Foi enviado um email de recuperção de senha. Verifique!!!";
                             } else {
                                 $msg_email = "Problema no envio do email de recuperação! Tente mais tarde";
-                            }
+                            } */
                         } else {
                             $msg = "Verifique se o email está correto!";
                         }
@@ -145,5 +146,38 @@
             }
             require_once "Views/form_email.php";
         } // Fim do método esqueceu senha
+
+        public function trocar_senha() {
+            if(isset($_GET["id"])) {
+                $erro = false;
+                $msg = array("", "");
+                $id = base64_decode($_GET["id"]);
+                if($_POST) {
+                    if(empty($_POST["senha"])) {
+                        $msg[0] = "Senha obrigatoria!";
+                        $erro = true;  
+                    }
+
+                    if(empty($_POST["confirmar_senha"])) {
+                        $msg[1] = "Preencha sua senha novamente!";
+                        $erro = true;  
+                    }
+
+                    if(!$erro && $_POST["senha"] != $_POST["confirmar_senha"]) {
+                        $msg[0] = "Senhas não são iguais";
+                        $erro = true;
+                    }
+                    if(!$erro) {
+                        // alterar senha no BD
+                        $usuario = new Usuarios(id_usuario:$_POST["id_usuario"], senha:password_hash($_POST["senha"], PASSWORD_DEFAULT));
+                        $UsuarioDAO = new UsuarioDAO();
+                        $retorno = $UsuarioDAO->alterar_senha($usuario);
+                        header("location:index.php?controle=usuarioController&metodo=login");
+                    }
+                }
+
+                require_once "Views/trocar_senha.php";
+            }
+        } // fim do método trocar_senha
     } // Fim da classe
 ?>

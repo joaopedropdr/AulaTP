@@ -7,7 +7,7 @@
             parent:: __construct();
         }
 
-        public function inserir($usuario) {
+        public function inserir( $usuario) {
             $sql = "INSERT INTO usuarios (nome, email, senha, celular) VALUES (?, ?, ?, ?)";
             try {
                 // Preparar a Frase SQL
@@ -26,7 +26,7 @@
             }
         } // Fim método inserir
 
-        public function login($usuario) {
+        public function login( $usuario) {
             $sql = "SELECT id_usuario, email, senha, nome FROM usuarios WHERE email = ?";
             try {
                 $stm = $this->db->prepare($sql);
@@ -40,7 +40,7 @@
             } 
         }// Fim método login
 
-        public function verificar_email($usuario) {
+        public function verificar_email( $usuario) {
             $sql = "SELECT email, nome, id_usuario FROM usuarios WHERE email = ?";
             try {
                 $stm = $this->db->prepare($sql);
@@ -53,5 +53,20 @@
                 return "Problema ao validar o email";
             }
         } // fim método verificar_email
+
+        public function alterar_senha( $usuario) {
+            $sql = "UPDATE usuarios SET senha = ? WHERE id_usuario = ?";
+            try {
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1, $usuario->getSenha());
+                $stm->bindValue(2, $usuario->getId_usuario());
+                $stm->execute();
+                $this->db = null;
+                return "Senha alterada com sucesso";
+            } catch(PDOExceptoin $e) {
+                $this->db = null;
+                return "Problema na alteração da senha";
+            }
+        }
     }
 ?>

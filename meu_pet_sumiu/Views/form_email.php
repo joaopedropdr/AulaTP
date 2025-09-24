@@ -5,6 +5,12 @@
     <div class="conteiner">
         <h1 style="margin-top:60px;margin-bottom:20px;">Recuperar senha</h1>
         <div class="col-md-6 text-danger"><?php echo $msg_email; ?></div>
+        <?php
+            // Retirar quando for póssivel o envio do email
+            if($link != "") {
+                echo "<a href= '" . $link . "'>Clique aqui </a>";
+            }
+        ?>
         <form class="row g-3" action="#" method="post">
             <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
