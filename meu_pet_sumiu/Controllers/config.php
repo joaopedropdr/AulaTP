@@ -19,7 +19,7 @@ $mail->Host = 'smtp.gmail.com';
 //$mail->SMTPDebug = 1;  // debugging: 1 = errors and messages, 2 = messages only
 $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for GMail
 $mail->Port = 465; 
-$mail->Username = 'seu_email';
+$mail->Username = $email_username;
 $mail->Password = 'sua_senha'; // Senha do aplicativo
 /*
 HOTMAIL

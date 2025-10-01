@@ -30,6 +30,7 @@
                                 if(!isset($_SESSION)) {
                                     session_start();
                                 }
+
                                 $_SESSION["nome"] = $retorno[0]->nome;
                                 $_SESSION["id"] = $retorno[0]->id_usuario;
                                 $_SESSION["email"] = $retorno[0]->email;
